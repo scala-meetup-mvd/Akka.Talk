@@ -1,785 +1,427 @@
 <!doctype html>
 <html lang="es">
 
-	<head>
-		<meta charset="utf-8">
-
-		<title>Akka Talk</title>
-
-		<meta name="description" content="Akka.io Overview">
-		<meta name="author" content="Fede Silva">
-
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
-
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
-		
-		<link rel="stylesheet" href="css/custom.css">
-
-		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
-		<script>
-			if( window.location.search.match( /print-pdf/gi ) ) {
-				var link = document.createElement( 'link' );
-				link.rel = 'stylesheet';
-				link.type = 'text/css';
-				link.href = 'css/print/pdf.css';
-				document.getElementsByTagName( 'head' )[0].appendChild( link );
-			}
-		</script>
-
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
-
-	<body>
-		<aside style="display: block; position: fixed; bottom: 20px; left: 20px; z-index: 30;">
-		    <a href="http://www.pyxis.com.uy"><img src="assets/pyxis_color_96x35.png"></a>
-		</aside>
-		<aside style="display: block; position: fixed; bottom: 20px; left: 125px; z-index: 30;">
-		    <a href="http://www.aquait.com.uy/"><img width="73px" style="margin-bottom: 6px;" src="assets/nuevo-logo-aquait-medium.png"></a>
-		</aside>
-		
-
-		<div class="reveal">
-
-			<div class="slides">
-				<section>
-					<h1>Reactive <br>Systems</h1>
-					<h2 style="color: orange;">Overview</h2>
-					<br/>
-					<h4>Guillermo Polito</h4>
-					<p><small><a href="http://twitter.com/gpolito">@gpolito</a> / <a href="http://github.com/gpolito/Reactive-Programming">slides at github</a></small>
-					</p>
-				</section>
-
-				<section>
-					<h2>Why Reactive?</h2>
-					<a href="http://internetlivestats.com/">internetlivestats.com</a>
-				</section>
-
-				<section>
-					<h2>Why Reactive?</h2>
-					<h3 style="color: orange;">Quick summary. In 10 years:</h3>
-					<table>
-						<thead>
-							<tr>
-								<th></th>
-								<th><strong>2005</strong></th>
-								<th><strong>2015</strong></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td><strong>Internet users</strong></td>
-								<td><span style="color: pink;">1000 millions</span></td>
-								<td>3000 millions</td>
-							</tr>
-							<tr>
-								<td><strong>YouTube</strong></td>
-								<td>was born on February, 2005</td>
-								<td><span style="color: pink;">more than 1000 million users</span></td>
-							</tr>
-							<tr>
-								<td><strong>Facebook</strong></td>
-								<td>5.5 million active users</td>
-								<td><span style="color: pink;">1.380 million active users</span></td>
-							</tr>
-							<tr>
-								<td><strong>Twitter</strong></td>
-								<td>wasn't born yet</td>
-								<td>288 million active users</td>
-							</tr>
-						</tbody>
-					</table>
-					<aside class="notes">
-						- primer columna primero, luego la segunda
-					</aside>
-				</section>
-
-				<section>
-					<h2>Why Reactive?</h2>
-					<h3 style="color: orange;"> Some things have changed during this years...</h3>
-					<table>
-						<thead>
-							<tr>
-								<th></th>
-								<th><span style="color: #009B77">Almost yesterday</span></th>
-								<th><span style="color: #009B77">Today</span></th>
-							</tr>
-						</thead>
-						<tbody>
-							<div>
-								<tr>
-									<td>Server nodes</td>
-									<td>10's</td>
-									<td>1000's</td>
-								</tr>
-								<tr >
-									<td>RAM</td>
-									<td>expensive</td>
-									<td>cheap</td>
-								</tr>
-								<tr>
-									<td>Network</td>
-									<td>slow</td>
-									<td>fast</td>
-								</tr>
-							</div>
-							<div>
-								<tr>
-									<td>Data volume</td>
-									<td>GBs</td>
-									<td>TBs -> PBs</td>
-								</tr>
-								<tr>
-									<td>Response times</td>
-									<td>seconds</td>
-									<td>milliseconds</td>
-								</tr>
-								<tr>
-									<td>Maintenance downtimes</td>
-									<td>hours</td>
-									<td>none</td>
-								</tr>
-							</div>
-						</tbody>
-					</table>
-					<aside class="notes">
-						- hardware
-						- user requirements
-					</aside>
-				</section>
-
-				
-
-				<section>
-					<h2>Why Reactive?</h2>
-					<h2 style="color: orange">Today's demands are simply not met by yesterday’s software architectures</h2>
-					<h2 class="fragment" style="color: orange">A new coherent approach to Systems Architecture is needed...</h2>
-					<aside class="notes">
-						lo q vimos hasta ahora fue un pantallazo de los numeros de la web hoy en dia, en donde el tráfico es impresionante. Vimos q el hardware ha mejorado y abaratado. Los requerimientos de los usuarios son muy exigentes.
-						Con las arquitecuras q conocemos hoy, sobre todo las MVC q utilizan un modelo de concurrencia basado en threads con mem compartida, se nos es muy complicado o casi imposible poder hacer frente a estos requerimientos.
-						Por lo general se utilizan mecanismos muy complicados para poder emparchar esta situación.
-					</aside>
-				</section>
-
-				<section data-background="#59CDEA">
-					<h2 style="color: white;">Reactive Systems</h2>
-					<h3 style="color: white;">Traits</h3>
-					<img style="border: none; box-shadow: none;" src="assets/reactive-traits.png" />
-					<strong><a style="color: white;" href="http://reactivemanifesto.org/">reactivemanifesto.org</a></strong>
-					<aside class="notes">
-					Organisations working in disparate domains are independently discovering patterns for building software that look the same. These systems are more robust, more resilient, more flexible and better positioned to meet modern demands.
-					These changes are happening because application requirements have changed dramatically in recent years. 
-					It is time to apply these design principles consciously from the start instead of rediscovering them each time.
-					</aside>
-				</section>
-
-				<!-- Responsive -->
-
-				<section data-background="#C55300" data-background-transition="zoom">
-					<h2>Responsive</h2>
-					<blockquote style="color: white;">
-						&ldquo;A responsive system is quick to react to all users — under blue skies and grey skies — in order to ensure a consistently positive user experience.&rdquo;
-					</blockquote>
-				</section>
-
-				<section>
-					<h2>Responsive Systems</h2>
-						<div class="fragment">
-							<h3 style="color: orange">offer:</h3>
-							<ul>
-								<li >rapid and consistent response times</li>
-								<li>reliable upper bounds to deliver a consistent QoS</li>
-							</ul>
-							<br><br>
-						</div>
-						<div class="fragment">
-							<h3 style="color: orange">should:</h3>
-							<ul>
-								<li class="fragment">detect problems quickly and dealt with them effectively</li>
-							</ul>
-						</div>
-						<aside class="notes">
-						</aside>
-				</section>
-
-				<!-- Resilience -->
-
-				<section data-background="#59CDEA">
-					<h2 style="color: white;">Reactive Systems</h2>
-					<h3 style="color: white;">Traits</h3>
-					<img style="border: none; box-shadow: none;" src="assets/reactive-traits.png" />
-					<strong><a style="color: white;" href="http://reactivemanifesto.org/">reactivemanifesto.org</a></strong>
-				</section>
-
-				<section data-background="#C55300" data-background-transition="zoom">
-					<h2>Resilient</h2>
-					<blockquote style="color: white;">
-						&ldquo;The ability of a sustance or object to spring back into shape.&rdquo;<br/>
-						&ldquo;The capacity to recover quickly from difficulties.&rdquo;
-					</blockquote>
-					<p style="color: white;">Merriam Webster</p>
-					<aside class="notes">Merriam–Webster Inc. de Springfield, Massachusetts, es una editorial estadounidense que publica libros de referencia, sobre todo diccionarios, que tienen su origen en el diccionario An American Dictionary of the English Language, de Noah Webster, publicado a su vez en 1828.</aside>
-				</section>
-
-				<section>
-					<h2>Resilient</h2>
-					<h3 style="color: orange;">The system should be responsive <br>in the face of failure.</h3>
-					<h2 class="fragment" style="color: brown;">Failure != Error</h2>
-					<h3 class="fragment"><br>Examples of failures:</h3>
-					<ul>
-						<li class="fragment">program defects causing corrupted internal state</li>
-						<li class="fragment">hardware malfunction</li>
-						<li class="fragment">network failures</li>
-						<li class="fragment">troubles with external services</li>
-					</ul>
-					<aside class="notes">
-						A failure is an unexpected event within a service that prevents it from continuing to function normally. A failure will generally prevent responses to the current, and possibly all following, client requests. This is in contrast with an error, which is an expected and coded-for condition—for example an error discovered during input validation, that will be communicated to the client as part of the normal processing of the message. 
-					</aside>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: #002B36">Resilient - how? </h2>
-					<h2 style="color: orange;">Failure Recovery in OOP</h2>
-					<img class="fragment" style="border: none; box-shadow: none; width: 60%" src="assets/oo-graph.png" />
-				</section>
-
-				<section>
-					<h2>Resilient - how? </h2>
-					<h2 style="color: orange;">Failure Recovery in OOP </h2>
-					<ul>
-						<li>single thread of control</li>
-						<li>if the thread blows up => you are screwed</li>
-						<li>no global organization of error handling </li> 
-						<li>defensive programming tangled with business logic, <br> scattered around the code</li>
-					</ul>
-				</section>
-
-				<section>
-					<h1 style="color: orange;">Resilience is by design</h1>
-					<h1 class="fragment">ok... but how?</h1>
-				</section>
-
-				<section>
-					<h2 style="color: orange;">Resilience is by design - How?</h2>
-					<ol style="font-size: 130%"><br>
-						<li>containment</li> <br>
-						<li>delegation</li><br>
-						<li>isolation</li><br>
-					</ol>
-					<br/>
-					<br/>
-					<p class="fragment"><em>let's review this concepts...</em></p>
-					<aside class="notes">
-						Cómo vamos a alcanzar la resiliencia? Contando con compartimientos que contengan a las fallas, y q aislen a los componentes entre si, permitiendo que partes del sistema puedan caerse y recuperarse sin comprometer al sistema entero.
-						La recuperación de cada componente es delegado a otro componente externo. El cliente no es responsable de manejar las fallas.  
-						La alta disponibilidad es asegurada replicando componentes donde sea necesario.
-					</aside>
-				</section>
-
-				<section>
-					<h2>Resilience is by design - How?</h2>
-					<ol style="font-size: 130%">
-						<br>
-						<li style="color: orange;"><strong>containment:</strong><br><br>
-							<span><em style="color: pink;">=> bulkheads</em></span><br>
-							<span><em style="color: pink;">=> circuit breaker</em></span>
-						</li>
-						<br> 
-						<li style="color: orange;"><strong>delegation</strong><br><br>
-							<span><em style="color: pink;">=> supervision</em></span>
-						</li>
-					</ol>
-				</section>
-
-				<section>
-					<h2>Resilience is by design - How?</h2>
-					<ol start="3">
-						<li style="color: orange;"> <strong>isolation (decoupling, both in time and space)</strong>
-							<br><br>
-							<span style="color: white;">
-								<span style="color: skyblue">- in time:</span> 
-								<br>sender and receiver don't need to be present at the same time for communicate
-							</span>
-							<br>
-							<span>
-								<em style="color: pink;">=> message-driven arquitecture</em>
-							</span> <br><br>
-							<span style="color: white;">
-								<span style="color: skyblue">- in space (defined as <em>Location Transparency</em>):</span> 
-								<br>the sender and receiver don't have to run in the same process, and this might change during application's lifetime
-							</span> <br>
-							<span>
-								<em style="color: pink;">=> message-driven arquitecture</em>
-							</span>	
-						</li>
-					</ol>
-				</section>
-
-				<section data-background="assets/ship.png" data-background-repeat="repeat" data-background-size="1200px">
-					<h1 style="color : black;">Bulkheads</h1>
-					<h1 style="color : black;">+</h1>
-					<h1 style="color : black;">Supervison</h1>
-					<aside class="notes">una vez q sabemos las propiedades q tenemos q tener en el diseño para lograr la resiliencia, vamos a revisar cada una de éstas.</aside>
-				</section>
-
-				<section>
-					<h2>Bulkheads help us to:</h2>
-					<ol>
-						<li class="fragment"><em>isolate the failure</em></li>
-						<li class="fragment"><em>compartmentalize</em></li>
-						<li class="fragment"><em>manage failure locally</em></li>
-						<li class="fragment"><em>avoid cascading failures</em></li>
-					</ol>
-					<br>
-					<br>
-					<p class="fragment">this concept should be used together with <span style="color: orange;">supervison!</span></p>
-				</section>
-
-				<section data-background="assets/burns.jpg">
-					<h1 style="color: white;">Supervison</h1>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: #002B36">Supervison</h2>
-					<h3 class="fragment" style="color: orange;">Core Concept</h3>
-					<img class="fragment" style="border: none; box-shadow: none;" src="assets/supervisor-1.png">
-					<aside class="notes">
-						Supervision means that normal requests and responses (including negative ones such as validation errors) flow separately from failures: while the former are exchanged between the user and the service, the latter travel from the service to its supervisor.
-					</aside>
-				</section>
-
-				<section>
-					<h2>Supervisor hierarchies with Actors</h2>
-					<img style="border: none; box-shadow: none;" src="assets/supervisor-h-1.png">
-				</section>
-
-				<section>
-					<h2>Supervisor hierarchies with Actors</h2>
-					<img style="border: none; box-shadow: none;" src="assets/supervisor-h-2.png">
-				</section>
-
-  				<section>
-					<h2>Supervisor hierarchies with Actors</h2>
-					<h3 style="color: orange;">Configuration in Akka</h3>
-				    <pre><code class="scala" contenteditable>
-import akka.actor.OneForOneStrategy
-import akka.actor.SupervisorStrategy._
-import scala.concurrent.duration._
- 
-override val supervisorStrategy =
-  OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
-    case _: ArithmeticException      => Resume
-    case _: NullPointerException     => Restart
-    case _: IllegalArgumentException => Stop
-    case _: Exception                => Escalate
-  }
-					</code></pre>
-				</section>
-
-				<section data-background="assets/electricity.jpg">
-					<h1 style="color: black;">Circuit Breaker</h1>
-				</section>
-					
-				<section>
-					<h2>Circuit Breaker</h2>
-					<h3 style="color: orange;">PROBLEM - Example Situation</h3>
-					<ul>
-						<li class="fragment">web app interacting with a remote WS</li>
-						<li class="fragment">remote WS is overloaded, and its DB takes a long time to respond with a fail</li>
-						<li class="fragment">=> WS calls fail after a long period of time</li>
-						<li class="fragment">=> web users noticed that form submissions takes time to complete</li>
-						<li class="fragment">=> web users start to click the refresh button adding more requests!</li>
-						<li class="fragment">=> web app fails due to resource exhaustion, affecting all users across the site</li>
-					</ul>
-					<p class="fragment" style="color: orange;"><em>failures in external dependencies shouldn' t bring down an entire app</em></p>
-				</section>
-
-				<section>
-					<h2>Circuit Breaker</h2>
-					<h3 style="color: orange;">Solution Proposal</h3>
-					<ol>
-						<li class="fragment">monitor response times</li>
-						<li class="fragment">if time consistently rises above a threshold, either:</li>
-							<ol type="a">
-								<li class="fragment"><em>fail fast</em> approach, or...</li>
-								<li class="fragment">route following requests to an alternative service</li>
-							</ol>
-						<li class="fragment">monitor the original service</li>
-						<li class="fragment"><em>if the service is back in shape</em>, restore to the original state</li>
-						<li class="fragment"><em>if not</em>, continue with the same approach</li>
-					</ol>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: #002B36">Circuit Breaker</h2>
-					<h3 style="color: orange;">Akka Implementation</h3>
-					<ul>
-						<li class="fragment">implements <em>fail fast</em> approach</li>
-						<li class="fragment">provide stability</li>
-						<li class="fragment">prevent cascading failures in distributed systems</li>
-					</ul>
-					<img class="fragment" style="border: none; box-shadow: none;" src="assets/circuit-breaker-states.png">
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: #002B36">Circuit Breaker</h2>
-					<h3 style="color: orange;">Akka Implementation</h3>
-					<h3 style="color: #009B77">configuration</h3>
-					<ul>
-						<li class="fragment"><em>max. number of failures</em></li>
-						<li class="fragment"><em>call timeout</em>: response time threshold</li>
-						<li class="fragment"><em>reset timeout</em>: we'll see this later</li>
-					</ul>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: #002B36">Circuit Breaker</h2>
-					<h3 style="color: orange;">Akka Implementation</h3>
-					<h3 style="color: #009B77">Closed state (normal operation)</h3>
-					<img class="fragment" style="border: none; box-shadow: none;" src="assets/circuit-breaker-states.png">
-					<ul>
-						<li class="fragment">Exceptions or calls exceeding the configured <em>callTimeout</em> increment a failure counter</li>
-						<li class="fragment">Successes reset the failure count to 0 (zero)</li>
-						<li class="fragment">When the failure counter reaches a <em>maxFailures</em> count, the breaker is tripped into <em>Open State</em></li>
-					</ul>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: #002B36">Circuit Breaker</h2>
-					<h3 style="color: orange;">Akka Implementation</h3>
-					<h3 style="color: #009B77">Open State</h3>
-					<img class="fragment" style="border: none; box-shadow: none;" src="assets/circuit-breaker-states.png">
-					<ul>
-						<li class="fragment">All calls fail-fast with a <em>CircuitBreakerOpenException</em></li>
-						<li class="fragment">After the configured <em>resetTimeout</em>, the circuit breaker enters a <em>Half-Open State</em></li>
-					</ul>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: #002B36">Circuit Breaker</h2>
-					<h3 style="color: orange;">Akka Implementation</h3>
-					<h3 style="color: #009B77">Half-Open State</h3>
-					<img class="fragment" style="border: none; box-shadow: none;" src="assets/circuit-breaker-states.png">
-					<ul>
-						<li class="fragment">The first call attempted is allowed through without failing fast</li>
-						<li class="fragment">All other calls fail-fast with an exception just as in <em>Open state</em></li>
-						<li class="fragment">If the first call succeeds, the breaker is reset back to <em>Closed state</em></li>
-						<li class="fragment">If the first call fails, the breaker is tripped again into the <em>Open state</em> for another full <em>resetTimeout</em></li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Circuit Breaker</h2>
-					<h3 style="color: orange;">Akka Implementation</h3>
-				    <pre><code class="scala" contenteditable>
-import akka.pattern.CircuitBreaker
- 
-def dangerousCall: String = "This really isn't that dangerous"
-
-val breaker =
-  CircuitBreaker(system.scheduler, 
-    maxFailures = 5, 
-    callTimeout = 10.seconds, 
-    resetTimeout = 1.minute)
- 
-def dangerous: Future[String] = 
-	breaker.withCircuitBreaker(Future(dangerousCall))
- 
-					</code></pre>
-				</section>
-
-				<section data-background="assets/water_pumping.jpg">
-					<h1 style="color: black;">Back Pressure</h1>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: orange;">Problem Description</h2>
-					<p class="fragment" style="color: #009B77"><strong>speed(publisher) > speed(suscriber)</strong></p>
-					<img class="fragment" style="border: none; box-shadow: none;" src="assets/back-pressure-0.png" >
-						
-					<aside class="notes">
-						when a component is under stress it might fail catastrophically or drop messages in an uncontrolled fashion. To be more resilient, the system as a whole needs to react to avoid this kind of situations
-					</aside>
-					<p class="fragment" style="color: #009B77">bounded buffer => drop messages + require re-sending</strong></p>
-					<p class="fragment" style="color: #009B77">unbounded buffer => buffer overflow </strong></p>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: orange;">Back Pressure - Solution</h2>
-					<p><strong>speed(publisher) < speed(suscriber)</strong></p>
-					<img style="border: none; box-shadow: none;" src="assets/back-pressure.png">
-					
-					<aside class="notes">Back pressure:  the component should communicate that is under stress to upstream components, so they can start reducing the load
-					</aside>
-				</section>
-
-				<section data-background="#FFFFFF">
-					<h2 style="color: orange;">Back Pressure</h2>
-					<p style="color: #009B77">this mechanism is included into the <strong>Reactive Stream</strong> specification</p>
-					<p></p>
-					
-					<img width="50%" style="border: none; box-shadow: none;" src="assets/reactive-streams-page.png">
-					<p><a style="color: #009B77" href="http://reactive-streams.org/">http://reactive-streams.org/</a></p>
-				</section>
-
-				<section>
-					<h2>Reactive Streams</h2>
-					<p class="fragment" style="color: orange">Stream processing on the JVM:</p>
-					<ul>
-						<li class="fragment">Asynchronous</li>
-						<li class="fragment">Back-pressured</li>
-						<li class="fragment">Standarized</li>
-					</ul>
-					<br><br>
-					<p class="fragment" style="color: orange">Available implementations:</p>
-					<ul>
-						<li class="fragment">Akka Streams</li>
-						<li class="fragment">Reactor Composable (DSL for groovy, clojure)</li>
-						<li class="fragment">RxJava</li>
-						<li class="fragment">Ratpack</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Reactive Streams</h2>
-					<h2 style="color: orange">Akka Streams Example</h2>
-				    <pre><code class="scala" contenteditable>
-implicit val system = ActorSystem("Sys")
-val mat = FLowMaterializer(...)
-
-Flow(text.split("" "").toVector).
-    map(word => word.toUpperCase).
-    foreach(transformed => println(transformed)).
-    onComplete(mat) {
-        case Success(_) => ...; system.shutdown();
-        case Failure(e) => ...; system.shutdown();
-    }
-					</code></pre>
-				</section>
-
-				<!-- Elastic -->
-
-				<section data-background="#59CDEA">
-					<h2 style="color: white;">Reactive Systems</h2>
-					<h3 style="color: white;">Traits</h3>
-					<img style="border: none; box-shadow: none;" src="assets/reactive-traits.png" />
-					<strong><a style="color: white;" href="http://reactivemanifesto.org/">reactivemanifesto.org</a></strong>
-				</section>
-
-				<section data-background="#C55300" data-background-transition="zoom">
-					<h2 style="color: black">Elasticity</h2>
-					<div class="fragment">
-					<h1>Scalability</h1>
-					<h1>+</h1>
-					<h1>automatic resource management</h1>
-					</div>
-				</section>
-
-				<section data-background="#FFFFFF" data-background-transition="zoom">
-					<p style="font-size: 150%; color: black; text-transform: none;">slidesLanguageService.<br><span style="color: brown">setLang</span>(<span style="color: cornflowerblue">Lang.SPANGLISH</span>)</p>
-				</section>
-
-				<section>
-					<h2>Scalability - Qué significa? - (1)</h3>
-					<div class="fragment" style= "color: orange; font-size: 200%">
-						<p>la performance del sistema</p>
-						<p>es proporcional</p> 
-						<p>a los recursos reservados</p> 
-					</div>
-				</section>
-
-				<section>
-					<h2>Scalability - Qué significa? - (2)</h3>
-					<div class="fragment" style= "color: orange">
-						<h1 style= "color: orange">Scale OUT & IN <span style="color: grey; font-size: 70%">(horizontal)</span></h1>
-						<h2 style= "color: orange"> + </h2>
-						<h1 style= "color: orange">Scale UP & DOWN <span style="color: grey; font-size: 70%">(vertical)</span></h1>
-					</div>
-				</section>
-
-				<section>
-					<h2>Scalability</h2>
-					<h3 style= "color: orange;">Por qué es necesario?</h3>
-					<ul>
-						<li class="fragment">por ejemplo: en el dominio eCommerce:</li>
-						<p class="fragment">- los picos de tráfico mas altos se dan cuando cuando estás vendiendo bien</p>
-						<p class="fragment">- durante un pico de tráfico la gente basicamente <em>quiere darte su dinero</em> :) </p>
-					</ul>
-				</section>
-
-				<section>
-					<h1 style="color: orange">Cómo lo logramos?</h1>
-					<ul style="font-size: 120%">
-						<li>Never Block -> Go Async</li><br>
-						<li>Share Nothing -> Use Immutable Data</li><br>
-						<li>Location Transparency</li><br>
-					</ul>
-				</section>
-
-				<section data-background="white">
-					<h2 style="color: orange">Never Block -> Go Async</h2>
-					<img style="border: none; box-shadow: none;" src="assets/contention.png">
-				</section>
-
-				<section data-background="white">
-					<h2 style="color: orange">Share Nothing -> Use Immutable Data</h2>
-					<img style="border: none; box-shadow: none; width: 74%" src="assets/amdahl.png">
-				</section>
-
-				<section>
-					<h2>Location Transparency</h2>
-					<h1 style= "color: orange">Scale OUT = Scale UP</h1>
-					<aside class="notes">
-						- la transparencia de localización permite el desacoplamiento a nivel del espacio
-						- dos componentes se pueden comunicar si conocer donde estan ubicados.
-						- permite adaptar la topologia del sistema dependiendo del uso 
-						- es un concepto clave para poder escalar bajo demanda
-						- como estamos haciendo computación distribuida, no hay diferencia conceptual entre comunicarse con un componente en el mismo nodo o en otro nodo del cluster
-					</aside>
-				</section>
-
-				<section>
-					<h1>la <span style="color: orange">Elasticidad</span></h1>
-					<h1>requiere de una </h1>
-					<h1 style="color: orange">Message-driven Arquitecture</h1>
-				</section>
-
-
-				<!-- Message Driven -->
-				
-				<section data-background="#59CDEA">
-					<h2 style="color: white;">Reactive Systems</h2>
-					<h3 style="color: white;">Traits</h3>
-					<img style="border: none; box-shadow: none;" src="assets/reactive-traits.png" />
-					<strong><a style="color: white;" href="http://reactivemanifesto.org/">reactivemanifesto.org</a></strong>
-				</section>
-
-				<section data-background="#C55300" data-background-transition="zoom">
-					<h1>Message Driven Arquitecture</h1>
-				</section>
-
-				<section>
-					<h2>Message Driven</h2>
-					<h3 style="color: orange;">Por qué es importante?</h3>
-					<p class="fragment">la comunicación asincrónica basada en pasaje de mensajes otorga/permite:</p>
-					<ul>
-						<li class="fragment"><strong style="color: pink;">bajo acoplamiento</strong></li>
-						<li class="fragment"><strong style="color: pink;">aislamiento</strong></li>
-						<li class="fragment"><strong style="color: pink;">location transparency</strong></li>
-						<li class="fragment"><strong style="color: pink;">mantenibilidad y flexibilidad para evolucionar</strong> - interfaces enfocadas en el contenido de la comunicación</li>
-						<li class="fragment"><strong style="color: pink;">lower latency & higher throughput</strong></li>
-						<li class="fragment"><strong style="color: pink;">scale up & out</strong></li>
-						<li class="fragment"><strong style="color: pink;">load management and flow control</strong> - a través del monitoreo de colas de mensaje y aplicando back-pressure</li>
-					</ul>
-					<aside class="notes"></aside>
-				</section>
-
-				<!-- End -->
-				<section data-background="#59CDEA">
-					<h2 style="color: white;">Reactive Systems</h2>
-					<h3 style="color: white;">Traits</h3>
-					<img style="border: none; box-shadow: none;" src="assets/reactive-traits.png" />
-					<strong><a style="color: white;" href="http://reactivemanifesto.org/">reactivemanifesto.org</a></strong>
-				</section>
-
-				<section>
-					<h2>Qué posibles tecnologías cumplen con todos estos requerimientos?</h2>
-					<table class="fragment">
-						<thead>
-							<tr>
-								<th><span style="color: orange;">Feature</span></th>
-								<th><span style="color: orange;">Akka</span></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>containment (bulkheads)</td>
-								<td>yes (actors)</td>
-							</tr>
-							<tr>
-								<td>asynchronous & non blocking message-passing</td>
-								<td>yes</td>
-							</tr>
-							<tr>
-								<td>fault tolerance</td>
-								<td>yes (supervision)</td>
-							</tr>
-							<tr>
-								<td>back-pressure</td>
-								<td>yes (by using Akka Streams)</td>
-							</tr>
-							<tr>
-								<td>circuit breaker</td>
-								<td>yes</td>
-							</tr>
-							<tr>
-								<td>location transparency</td>
-								<td>yes (ActorRef concept)</td>
-							</tr>
-						</tbody>
-					</table>   
-				</section>
-
-				<section>
-					<h1>Referencias</h1>
-						<p><a href="http://reactivemanifesto.org/">reactivemanifesto.org</a></p>
-						<p><a href="http://www.manning.com/kuhn/">Reactive Design Patterns - Roland Kuhn and Jamie Allen</a></p>
-						<p><a href="https://medium.com/reactive-programming/what-is-reactive-programming-bc9fa7f4a7fc">Kevin Webber - What is Reactive Programming?</a></p>
-						<p><a href="http://www.slideshare.net/jboner/going-reactive-eventdriven-scalable-resilient-systems">Jonas Boner - Go Reactive: Event-Driven, Scalable, Resilient & Responsive Systems</a></p>
-						<p><a href="http://internetlivestats.com/">internetlivestats.com</a></p>
-						<p><a href="http://www.slideshare.net/ktoso/reactive-stream-processing-with-akka-streams">Reactive Stream Processing with Akka Streams</a></p>
-						<p><a href="http://reactivestreams.org/">reactivestreams.org</a></p>
-				</section>
-
-				<section data-background="#000000">
-					<img style="border: none; box-shadow: none; width: 100%" src="assets/thats-all.gif">
-				</section>
-			</div>
-
-		</div>
-
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.min.js"></script>
-
-		<script>
-
-			// Full list of configuration options available here:
-			// https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				history: true,
-				center: true,
-				mouseWheel: true,
-
-				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
-
-				// Parallax scrolling
-				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
-				// parallaxBackgroundSize: '2100px 900px',
-
-				// Optional libraries used to extend on reveal.js
-				dependencies: [
-					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-				]
-			});
-
-		</script>
-
-	</body>
+<head>
+    <meta charset="utf-8">
+
+    <title>Akka Talk</title>
+
+    <meta name="description" content="Akka.io Overview">
+    <meta name="author" content="Fede Silva">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.min.css">
+    <link rel="stylesheet" href="css/theme/moon.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+        if (window.location.search.match(/print-pdf/gi)) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = 'css/print/pdf.css';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        }
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+
+<div class="reveal">
+
+    <div class="slides">
+        <section>
+            <h1>Akka</h1>
+
+            <h2 style="color: orange;">a toolkit for concurrent systems</h2>
+            <br/>
+            <h4>Federico Silva</h4>
+
+            <p>
+                <small>
+                    <a href="http://twitter.com/fedesilva">@fedesilva</a> /
+                    <a href="http://github.com/">slides at github</a>
+                </small>
+            </p>
+        </section>
+
+        <section>
+            <h1>Akka</h1>
+
+            <h2 style="color:orange" >Federico Silva</h2>
+
+            <ul>
+                <li>One significant Akka App</li>
+                <li>Several smaller things in the middle</li>
+                <li>Now starting to build on Akka again</li>
+            </ul>
+
+        </section>
+
+
+        <section>
+            <h2>What is Akka?</h2>
+            <a href="http://akka.io/">Akka.io</a>
+
+            <div>
+                <p>
+                    Akka is a toolkit and runtime
+                    for building highly concurrent,
+                    distributed, and resilient
+                    message-driven applications
+                    on the JVM.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <h2>What is Akka?</h2>
+
+            <div>
+                <ul>
+                    <li>A toolkit</li>
+                    <li>A runtime</li>
+                    <li>JVM based</li>
+                    <li>Written in Scala</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>What is Akka?</h2>
+
+            <div>
+                <ul>
+                    <li>Concurrent</li>
+                    <li>Parallel</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>What is Akka?</h2>
+
+            <div>
+                <h4 style="color: yellow" >Concurrent</h4>
+
+                <p>What is the innovation?</p>
+
+                <p>What makes it different and why is it important?</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Why is concurrency important?</h2>
+
+            <div>
+                <ul>
+                    <li>Modern CPUs</li>
+                    <li>Many CPUs</li>
+                    <li>Many Computers</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Why do we need something new?</h2>
+
+            <div>
+                <ul>
+                    <li>Need more control</li>
+                    <li>Need clear semantics</li>
+                    <li>Less coupling</li>
+                    <li>Fault tolerance</li>
+                    <li>Distribution?</li>
+                    <li>Threads are not enough</li>
+                    <li>Neither are thread pools</li>
+                    <li>or Fork/Join</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>What is Akka?</h2>
+            <p style="color: orange; font-weight: bolder;"  >What does it bring to the table?</p>
+            <p>A unified model for concurrency and distribution via the Actor Model</p>
+        </section>
+
+        <section>
+            <h2>Actor Model</h2>
+
+            <p style="color:orangered" ><b><small>Old concept</small></b></p>
+
+            <p>"A Universal Modular Actor Formalism for Artificial Intelligence".</p>
+            <p>Carl Hewitt; Peter Bishop; Richard Steiger (1973).</p>
+
+        </section>
+
+        <section>
+
+            <h2>Actor Model</h2>
+
+            <p>
+                The actor model in computer science is a mathematical model of concurrent computation that treats
+                "actors" as the universal primitives of concurrent computation: in response to a message that it
+                receives, an actor can make local decisions, create more actors, send more messages, and determine how
+                to respond to the next message received.
+            </p>
+
+        </section>
+
+        <section>
+
+            <h2>Actor Model</h2>
+
+            <p style="color:orange" >
+                Other implementations
+            </p>
+            <ul>
+                <li>Ruby, Celluloid</li>
+                <li>Erlang, language construct, OTP adds features</li>
+                <li>.NET, dotsero, Akka.net, MS Orleans</li>
+            </ul>
+
+        </section>
+
+        <section>
+            <h2>Actor Model</h2>
+            <ul>
+                <li>Message Passing</li>
+                <li>Location transparency</li>
+                <li>Isolation</li>
+                <li>Supervision</li>
+                <li>Monitoring</li>
+                <li>Dynamic behaviour</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Message Passing</h2>
+            <p>Is the basic building block, other features build upon it</p>
+            <ul>
+                <li>Asynchronous delivery</li>
+                <li>Isolation</li>
+                <li>Location transparency</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Isolation</h2>
+            <p>Ability to control internal state, run without interference</p>
+        </section>
+
+        <section>
+            <h2>Location Transparency</h2>
+            <p>Ability to send a message without considering where the recipient is located</p>
+        </section>
+
+        <section>
+            <h2>Supervision and Monitoring</h2>
+            <p>Actor systems form hierarchies where each node is the supervisor of its children.</p>
+        </section>
+
+        <section>
+            <h2>Supervision and Monitoring</h2>
+            <ul>
+                <li>Supervisors can delegate long running tasks</li>
+                <li>Worker nodes need not consider fault management</li>
+                <li>Cooperatively solve problems, under watch from supervisor</li>
+                <li>Supervisor gets messages when children die, can restart, kill others</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Dynamic Behaviour</h2>
+            <p>An actor can change its own behaviour in response to messages.</p>
+            <p>Can be though of as a state machine.</p>
+        </section>
+
+        <section>
+            <h2>Actors in Akka</h2>
+            <ul>
+                <li>Actor Reference</li>
+                <li>State</li>
+                <li>Behavior</li>
+                <li>Mailbox</li>
+                <li>Children</li>
+                <li>Supervisor Strategy</li>
+                <li>When an Actor Terminates</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Look at some code</h2>
+            <p>Simple Akka Seed from Activator &copy;</p>
+            <ol>
+                <li>App from template</li>
+                <li>Implement Switch Actor</li>
+                <li>Look at CounterActor</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Other Akka modules</h2>
+            <ul>
+                <li>Cluster</li>
+                <li>Persistence</li>
+                <li>FSM</li>
+                <li>Camel</li>
+                <li>HTTP</li>
+                <li>Reactive Streams</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Akka Cluster</h2>
+            <ul>
+                <li>Remoting</li>
+                <li>Routing</li>
+                <li>Load Balancing</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Akka Persistence</h2>
+            <ul>
+                <li>Evented architectures, CQRS</li>
+                <li>Commands, backed by WAL</li>
+                <li>Persistence of state, with recovery</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Reactive Streams</h2>
+            <p>Better alternative, safer too</p>
+        </section>
+
+        <section>
+            <h2>What is not SO good?</h2>
+        </section>
+
+        <section>
+            <h2>What is not SO good?</h2>
+            <ol>
+                <li>Dynamic Behaviour!</li>
+                <li>No help from the type system</li>
+                <li>Closing over state is not tracked</li>
+                <li>Invisible Mailbox</li>
+                <li>Actors? Futures? Both? When?</li>
+                <li>Too low level</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Patterns or good practices</h2>
+            <ul>
+                <li>Minimize work, delegate lengthy work</li>
+                <li>Pull don't push</li>
+                <li>Ask for flow control</li>
+                <li>Use functions to create behaviour, pass state</li>
+                <li>Use traits to isolate code</li>
+                <li>Use different dispatchers for different sections of the app</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Anatomy of an application</h2>
+            <ol>
+                <li>Simple Seed</li>
+                <li>Distributed Workers</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Misc</h2>
+            <ol>
+                <li>Data locality</li>
+                <li>Modeling data as an actor? CQRS like  </li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>References</h2>
+            <p><a href="akka.io" >Akka</a></p>
+            <p><a href="http://en.wikipedia.org/wiki/Actor_model" >Actor model</a></p>
+            <p><a href="https://typesafe.com/community/core-tools/activator-and-sbt" >Typesafe Activator</a></p>
+            <p><a href="http://worrydream.com/refs/Hewitt-ActorModel.pdf" >Hewitt's original paper</a></p>
+        </section>
+
+
+    </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        mouseWheel: true,
+
+        theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+        transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Parallax scrolling
+        // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+        // parallaxBackgroundSize: '2100px 900px',
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+            {
+                src: 'lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            }
+            },
+            {
+                src: 'plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            },
+            {
+                src: 'plugin/zoom-js/zoom.js', async: true, condition: function () {
+                return !!document.body.classList;
+            }
+            },
+            {
+                src: 'plugin/notes/notes.js', async: true, condition: function () {
+                return !!document.body.classList;
+            }
+            }
+        ]
+    });
+
+</script>
+
+</body>
 </html>
